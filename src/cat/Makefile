@@ -29,3 +29,6 @@ test:
 
 leaks:
 	$(CHEAK) ./s21_cat -s so *.txt
+
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all ./s21_cat *.txt

@@ -34,5 +34,7 @@ test:
 	-diff <(./s21_grep -lh so $(FILE)) <(grep -lh so $(FILE))
 
 leaks:
-	$(CHEAK) ./s21_grep -e so -e txt -e asdasd *.txt
 	$(CHEAK) ./s21_grep -o so *.txt
+
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all ./s21_grep *.txt
