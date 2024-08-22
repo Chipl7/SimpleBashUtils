@@ -6,7 +6,7 @@ FILE=1.txt 2.txt 3.txt
 all: gcc test
 
 gcc:
-	gcc $(CFLAGS) s21_cat.c s21_cat.h -o s21_cat
+	gcc $(CFLAGS) s21_cat.c -o s21_cat
 
 clang:
 	@cp ../../materials/linters/.clang-format .

@@ -7,7 +7,7 @@ PATTERN=pattern.reg
 all: clean gcc test
 
 gcc:
-	gcc $(CFLAGS) s21_grep.c s21_grep.h -o s21_grep
+	gcc $(CFLAGS) s21_grep.c -o s21_grep
 
 clang:
 	@cp ../../materials/linters/.clang-format .
