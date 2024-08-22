@@ -4,17 +4,26 @@ CHEAK=leaks -atExit --
 FILE=1.txt 2.txt 3.txt 4.txt
 PATTERN=pattern.reg
 
-all:
+all: clean gcc test
+
+gcc:
 	gcc $(CFLAGS) s21_grep.c s21_grep.h -o s21_grep
 
 clang:
-	@cp ../../linters/.clang-format .
+	@cp ../../materials/linters/.clang-format .
 	@clang-format -i *.c
 	@clang-format -i *.h
 	@rm ./.clang-format
 
+clang-test:
+	@cp ../../materials/linters/.clang-format .
+	@clang-format -n *.c
+	@clang-format -n *.h
+	@rm ./.clang-format
+
 clean:
 	rm -f s21_grep
+	@clear
 
 test:
 	-diff <(./s21_grep -i so $(FILE)) <(grep -i so $(FILE))

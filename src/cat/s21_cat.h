@@ -11,6 +11,8 @@ struct Flags {
   int t;
   int T;
   int v;
+  int str_number;
+  int file_numbers;
 };
 
 void go_cat(int argc, char **argv);
@@ -21,11 +23,11 @@ void check_struct(struct Flags *flag);
 void openFiles_cat(struct Flags *flag, int fileStartMark, int argc,
                    char **argv);
 void print_file_cat(FILE *file, struct Flags *flag);
-void write_character_to_console(struct Flags *flag, int *strNumber, char prevCh,
-                                char ch, char nextCh);
+void write_character_to_console(struct Flags *flag, char prevCh, char ch,
+                                char nextCh);
 int s_mode(struct Flags *flag, char prevCh, char ch, char nextCh);
 void e_mode(struct Flags *flag, char ch);
 int t_mode(struct Flags *flag, char ch);
 void v_mode(struct Flags *flag, char *ch);
-void n_mode(struct Flags *flag, int *strNumber, char ch, char nextCh);
-void b_mode(struct Flags *flag, int *strNumber, char ch, char nextCh);
+void n_mode(struct Flags *flag, char ch, char nextCh);
+void b_mode(struct Flags *flag, char ch, char nextCh);

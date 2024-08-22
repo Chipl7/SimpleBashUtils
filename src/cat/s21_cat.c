@@ -73,6 +73,8 @@ void check_struct(struct Flags *flag) {
 
 void openFiles_cat(struct Flags *flag, int fileStartMark, int argc,
                    char **argv) {
+  flag->str_number = 1;
+  flag->file_numbers = 1;
   for (int i = fileStartMark; i < argc; i++) {
     FILE *file = fopen(argv[i], "r");
     if (file == NULL) {
@@ -82,12 +84,12 @@ void openFiles_cat(struct Flags *flag, int fileStartMark, int argc,
       print_file_cat(file, flag);
       fclose(file);
     }
+    flag->file_numbers++;
   }
 }
 
 void print_file_cat(FILE *file, struct Flags *flag) {
-  int strNumber = 1;
-  char prevCh = '\n', ch, nextCh;
+  char prevCh, ch, nextCh;
 
   ch = fgetc(file);
 
@@ -98,26 +100,27 @@ void print_file_cat(FILE *file, struct Flags *flag) {
       ch = fgetc(file);
     }
   }
-  if (flag->n == 1) printf("%6d\t", strNumber++);
-  if (flag->b == 1 && ch != '\n') printf("%6d\t", strNumber++);
-
+  if (flag->file_numbers < 2) {
+    if (flag->n == 1) printf("%6d\t", flag->str_number++);
+    if (flag->b == 1 && ch != '\n') printf("%6d\t", flag->str_number++);
+  }
   while ((nextCh = fgetc(file)) != EOF) {
-    write_character_to_console(flag, &strNumber, prevCh, ch, nextCh);
+    write_character_to_console(flag, prevCh, ch, nextCh);
     prevCh = ch;
     ch = nextCh;
   }
-  write_character_to_console(flag, &strNumber, prevCh, ch, nextCh);
+  write_character_to_console(flag, prevCh, ch, nextCh);
 }
 
-void write_character_to_console(struct Flags *flag, int *strNumber, char prevCh,
-                                char ch, char nextCh) {
+void write_character_to_console(struct Flags *flag, char prevCh, char ch,
+                                char nextCh) {
   if (s_mode(flag, prevCh, ch, nextCh) == 1) return;
   if (t_mode(flag, ch) == 1) return;
   e_mode(flag, ch);
   v_mode(flag, &ch);
   putchar(ch);
-  n_mode(flag, strNumber, ch, nextCh);
-  b_mode(flag, strNumber, ch, nextCh);
+  n_mode(flag, ch, nextCh);
+  b_mode(flag, ch, nextCh);
 }
 
 int s_mode(struct Flags *flag, char prevCh, char ch, char nextCh) {
@@ -156,16 +159,16 @@ void v_mode(struct Flags *flag, char *ch) {
   }
 }
 
-void n_mode(struct Flags *flag, int *strNumber, char ch, char nextCh) {
+void n_mode(struct Flags *flag, char ch, char nextCh) {
   if (ch == '\n' && flag->n == 1 && nextCh != EOF) {
-    printf("%6d\t", *strNumber);
-    *strNumber = *strNumber + 1;
+    printf("%6d\t", flag->str_number);
+    flag->str_number++;
   }
 }
 
-void b_mode(struct Flags *flag, int *strNumber, char ch, char nextCh) {
+void b_mode(struct Flags *flag, char ch, char nextCh) {
   if (flag->b == 1 && ch == '\n' && nextCh != '\n' && nextCh != EOF) {
-    printf("%6d\t", *strNumber);
-    *strNumber = *strNumber + 1;
+    printf("%6d\t", flag->str_number);
+    flag->str_number++;
   }
 }
