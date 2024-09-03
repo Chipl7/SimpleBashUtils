@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 CFLAGS=-Wall -Wextra -Werror -std=c11 -D _POSIX_C_SOURCE=200809L -D _GNU_SOURCE_ -D _GNU_SOURCE
-CHEAK=leaks -atExit --
+CLEAN_FIELS=s21_grep *.log
 FILE=1.txt 2.txt 3.txt 4.txt
 PATTERN=pattern.reg
 
@@ -9,20 +9,24 @@ all: clean gcc test
 gcc:
 	gcc $(CFLAGS) s21_grep.c -o s21_grep
 
-clang:
-	@cp ../../materials/linters/.clang-format .
-	@clang-format -i *.c
-	@clang-format -i *.h
+clang_format:
+	@echo "┏=========================================┓"
+	@echo "┃  Formatting your code for Google Style  ┃"
+	@echo "┗=========================================┛"
+	@cp ../../linters/.clang-format .
+	@clang-format -i *.c *.h
 	@rm ./.clang-format
 
-clang-test:
-	@cp ../../materials/linters/.clang-format .
-	@clang-format -n *.c
-	@clang-format -n *.h
+clang_check:
+	@echo "┏=========================================┓"
+	@echo "┃  Checking your code for Google Style    ┃"
+	@echo "┗=========================================┛"
+	@cp ../../linters/.clang-format .
+	@clang-format -n *.c *.h
 	@rm ./.clang-format
 
 clean:
-	rm -f s21_grep
+	rm -f $(CLEAN_FIELS)
 	@clear
 
 test:
@@ -42,8 +46,8 @@ test:
 	-diff <(./s21_grep -ince '^so' $(FILE)) <(grep -ince '^so' $(FILE))
 	-diff <(./s21_grep -lh so $(FILE)) <(grep -lh so $(FILE))
 
-leaks:
-	$(CHEAK) ./s21_grep -o so *.txt
-
-valgrind:
-	valgrind --leak-check=full --show-leak-kinds=all ./s21_grep *.txt
+valgrind: gcc
+	@CK_FORK=no valgrind --vgdb=no --leak-check=full \
+	--show-leak-kinds=all --track-origins=yes --log-file="valgrind.log" -v --verbose -q --quiet -s ./s21_grep so *.txt
+	@clear
+	@cat valgrind.log
