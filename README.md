@@ -1,6 +1,6 @@
 # SimpleBashUtils
 
-Проект предстявляет из себя реализацию команд cat и grep на языке программирования C.
+The project is an implementation of the cat and grep commands in the C programming language. The build is done using Makefile. The project is written for MacOS, the end-of-line character sequences are LF.
 
 ## Cat
 
@@ -45,39 +45,24 @@ TEMPLATE: `grep [OPTION] [TEMPLATE] [FILE]`
   cd SimpleBashUtils
 ```
 
-3. Go to the cat or grep folder
+3. Cat dir
 
 ```bash
   cd src/cat
+```
+4. Grep dir
+
+```bash
   cd src/grep
 ```
-
-4. Run make for build
+5. Run make for build
 
 ```bash
   make gcc
 ```
 
-5. Run test
+6. Run test
 
 ```bash
   make test
-```
-
-6. Clean project
-
-```bash
-  make clean
-```
-
-7. Google Style Check
-
-```bash
-  make clang_check
-```
-
-8. Google Style Format
-
-```bash
-  make clang_format
 ```
